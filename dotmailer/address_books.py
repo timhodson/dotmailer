@@ -233,6 +233,29 @@ class AddressBook(Base):
 
         return all_address_books
 
+    @classmethod
+    def get_contacts(cls, id):
+        """
+        Gets contacts for a given address book
+
+        :param id:
+        :return:
+        """
+        from dotmailer.contacts import Contact
+
+        # Cast the ID parameter to an integer
+        id = int(id)
+
+        # Check that the ID parameter is greater than zero, if not raise
+        # an exception.
+        if id < 1:
+            raise Exception()
+
+        response = connection.get(
+            '{}/{}/contacts'.format(cls.end_point, id)
+        )
+        return [Contact.get_by_id(entry['id']) for entry in response]
+
     def add_contact(self, contact):
         """
         Adds a contact to a given address book
